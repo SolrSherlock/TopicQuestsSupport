@@ -1,22 +1,28 @@
 /*
- * Copyright 2010, TopicQuests
+ *  Copyright (C) 2004,2005  Jack Park,
+ * 	mail : jackpark@thinkalong.com
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Part of <NexistGroup Objects>, an open source project.
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions
- * and limitations under the License.
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.nex.config;
 import java.io.*;
 import java.util.*;
 /** in xpp.jar */
+import org.topicquests.util.ConfigurationHelper;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -28,7 +34,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
  * <p>Company: NexistGroup</p>
  * @author Jack Park
  * @version 1.0
- * @license Apache2
  */
 /**
  *  DTD handled by this class:
@@ -44,7 +49,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
       name    CDATA "Name" >
  */
 public class ConfigPullParser {
-	private Hashtable <String,Object>properties = new Hashtable<String,Object>();
+	private Map <String,Object>properties = new Hashtable<String,Object>();
 
 	/**
 	 * Constructor for ConfigPullParser.
@@ -53,8 +58,9 @@ public class ConfigPullParser {
 	public ConfigPullParser(String configFilePath) {
 		super();
 		try {
+			String path = ConfigurationHelper.findPath(configFilePath);
 			// open a file
-			File f = new File(configFilePath);
+			File f = new File(path);
 			// grab an inputstream
 			FileInputStream fis = new FileInputStream(f);
 			// parse this puppy
@@ -63,6 +69,7 @@ public class ConfigPullParser {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+	
 
 	public ConfigPullParser(InputStream inStream) {
 		super();
@@ -76,7 +83,7 @@ public class ConfigPullParser {
 	 * @return properties table formed by parsing config file
 	 * called by TsServlet
 	 */
-	public Hashtable<String,Object> getProperties() {
+	public Map<String,Object> getProperties() {
 		return properties;
 	}
 

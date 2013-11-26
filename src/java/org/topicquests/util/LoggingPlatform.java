@@ -16,6 +16,8 @@
 package org.topicquests.util;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import java.io.File;
 import java.util.*;
 
 /**
@@ -27,20 +29,42 @@ public class LoggingPlatform {
 	private List<Tracer> tracers;
 	
 	private Logger log;
+	
 	/**
+	 * NOTE: this will check in several paths in case the logger properties
+	 * file is kept in other directores in the classpath
+	 * @param loggerPropertiesFilePath
 	 * 
 	 */
-	protected LoggingPlatform() {
-		PropertyConfigurator.configure("logger.properties");
+	protected LoggingPlatform(String loggerPropertiesFilePath) {
+		PropertyConfigurator.configure(ConfigurationHelper.findPath(loggerPropertiesFilePath));
 		log = Logger.getLogger(LoggingPlatform.class);
 		tracers = new ArrayList<Tracer>();
 	}
 
-	public static LoggingPlatform getInstance() {
-		if (instance == null)
-			instance = new LoggingPlatform();
+
+	/**
+	 * This method will throw a {@link RuntimeException} if
+	 * the other $getInstance was not called
+	 * @return
+	 */
+	public static LoggingPlatform getLiveInstance() {
+		if (instance==null)
+			throw new RuntimeException("LoggingPlatform not initialized");
 		return instance;
 	}
+	
+	/**
+	 * This is the first method to call
+	 * @param loggerPropertiesFilePath
+	 * @return
+	 */
+	public static LoggingPlatform getInstance(String loggerPropertiesFilePath) {
+		if (instance == null)
+			instance = new LoggingPlatform(loggerPropertiesFilePath);
+		return instance;
+	}
+	
 	public void logDebug(String msg) {
 		log.debug(msg);
 	}
