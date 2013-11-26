@@ -10,11 +10,13 @@
 <project name="TopicQuestsSupport" default="compile" basedir=".">
 
 	<!--  properties -->
+	
 	<property file="build.properties" />
 
 	<property name="basedir" value="." />
 	
 	<property name="src.dir" value="${basedir}/src/" />
+	
 
 
 	<property name="lib.dir" value="${basedir}/lib" />
@@ -46,7 +48,7 @@
 			deprecation="${compile.deprecation}" optimize="${optimize}" target="1.6">
 			<classpath refid="build.classpath" />
 		</javac>
-		<jar file="TopicQuestsSupport.jar" basedir="${classes.dir}" />
+		<jar file="tq-support-${buildversion}.jar" basedir="${classes.dir}" />
 	</target>
 </project>
 
