@@ -23,6 +23,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +41,7 @@ public abstract class DateUtil {
     // a bunch of date formats
     private static final String formatDefaultDate = "dd.MM.yyyy";
     private static final String formatDefaultDateMinimal = "d.M.yy";
-    private static final String formatDefaultTimestamp = "yyyy-MM-dd HH:mm:ss.SSS";
+    private static final String formatDefaultTimestamp = "yyyy-MM-dd HH:mm:ss"; //.SSS";
     
     private static final String formatFriendlyTimestamp = "dd.MM.yyyy HH:mm:ss";
     
@@ -440,6 +441,34 @@ public abstract class DateUtil {
     	return defaultTimestamp(new Date(timestamp));
     }
     
+    /**
+     * <code>timestamp</code> looks like 2013-11-26 11:09:47.403
+     * @param timestamp
+     * @return
+     */
+    public static Date fromDefaultTimestamp(String timestamp) {
+    	System.out.println("DateUtil.fromDefaultTimestamp- "+timestamp);
+    	Date result = null;
+    	String [] parts = timestamp.split(" ");
+    	String big = parts[0];
+    	String small = parts[1];
+    	GregorianCalendar c = new GregorianCalendar();
+    	String[] bigger = big.split("-");
+    	int yr = Integer.parseInt(bigger[0]);
+    	int mo = Integer.parseInt(bigger[1]);
+    	int da = Integer.parseInt(bigger[2]);
+    	String[] smaller = small.split(":");
+    	int hr = Integer.parseInt(smaller[0]);
+    	int min = Integer.parseInt(smaller[1]);
+    	String x = smaller[2];
+    	int where = x.indexOf('.');
+    	if (where > -1)
+    		x = x.substring(0,where);
+    	int sec = Integer.parseInt(x);
+    	c.set(yr,mo,da,hr,min,sec);
+    	result = new Date(c.getTimeInMillis());
+    	return result;
+    }
     // convenience method
     public static String defaultTimestamp(Date date) {
         return format(date, defaultTimestampFormat());
